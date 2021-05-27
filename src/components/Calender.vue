@@ -15,7 +15,7 @@
     
     <section class="section1">
       <p v-for="num in startDay()"  :key="num"></p>
-      <p v-for="num in daysInMonth(currentYear,currentMonth)"  :key="num">{{num}}</p>
+      <p v-for="num in daysInMonth(currentYear,currentMonth)" :style="currentDateClass(num)" :key="num">{{num}}</p>
     </section>
 
     <section class="btnSection">
@@ -34,8 +34,12 @@ export default {
 
   setup() {
     let currentMonth = ref(new Date().getMonth())
-    // currentMonth.value = 
     const currentYear = ref(new Date().getFullYear())
+    const currentDate = new Date().getUTCDate()
+    const changeColor = {
+      color : 'blue',
+      fontWeight : "900"
+    }
    
 
     const days = reactive([
@@ -80,6 +84,16 @@ export default {
       ).toLocaleString('default', {month: 'long'})
     })
 
+    function currentDateClass(num) {
+      const calenderFullDate = new Date(
+        currentYear.value, 
+        currentMonth.value,
+        num
+        ).toDateString()
+        const currentFullDate = new Date().toDateString();
+        return calenderFullDate === currentFullDate ? changeColor : " ";
+    }
+
     return {
       days,
       currentMonth,
@@ -88,27 +102,30 @@ export default {
       currentMonthName,
       startDay,
       next,
-      prev
+      prev,
+      currentDate,
+      changeColor,
+      currentDateClass
     }
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .app{
-  border: 1px solid red;
+  /* border: 1px solid red; */
   width: fit-content;
   margin: auto;
 }
 .header {
   width: fit-content;
   margin: auto;
+  
 }
 
 .section   {
   display: flex;
-  border: 1px solid red;
+  /* border: 1px solid red; */
   text-align: center;
   width: fit-content;
   margin: auto;
